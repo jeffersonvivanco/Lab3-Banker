@@ -14,7 +14,7 @@ public class Task {
     private HashMap<Integer,Resource> resourceHashMap;
     private int totalTime = 0;
     private boolean aborted = false;
-
+    private int computeCycles = 0;
     public Task (int taskNum){
         this.taskNum = taskNum;
         this.activities = new LinkedList<String>();
@@ -92,6 +92,15 @@ public class Task {
     public void releaseUnitsFromRes(int units, int res){
         Resource r = resourceHashMap.get(res);
         r.releaseUnits(units);
+    }
+    public void addComputeCycle(int cc){
+        this.computeCycles = computeCycles + cc;
+    }
+    public void minusComptCycle(){
+        this.computeCycles--;
+    }
+    public int getComputeCycles(){
+        return this.computeCycles;
     }
     @Override
     public String toString(){

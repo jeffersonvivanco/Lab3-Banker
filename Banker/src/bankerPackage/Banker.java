@@ -17,7 +17,7 @@ public class Banker {
         FileInputStream input  = null;
         BufferedReader br = null;
         try{
-            input  = new FileInputStream("/Users/jeffersonvivanco/IdeaProjects/Lab3-Banker/inputs/input-11.txt");
+            input  = new FileInputStream("/Users/jeffersonvivanco/IdeaProjects/Lab3-Banker/inputs/input-13.txt");
             br = new BufferedReader(new InputStreamReader(input));
         }catch (Exception e){
             System.err.println("File could not be read or could not be found. Please make sure"+
@@ -91,6 +91,8 @@ public class Banker {
         HashMap<Integer,Resource> resourceWaitHashMap = new HashMap<Integer,Resource>();
         /* Arraylist for tasks that have been processed in the waitQ and need to be put back in the taskHashMap */
         ArrayList<Task> processedQueuedTasks = new ArrayList<Task>();
+        /* Hashmap for tasks that are computing */
+        HashMap<Integer,Task> computingTasksMap = new HashMap<Integer, Task>();
 
         int cycle = 0;//cycle #
         int numOfTasks = taskHashMap.size();
@@ -201,6 +203,14 @@ public class Banker {
                     }
                     didSomethingElseToo = true;
                 }
+                //If act is compute
+                if(act.equals("compute")){
+                    int numOfCycles = actResourceNum;
+                    temp.addComputeCycle(numOfCycles);
+                    computingTasksMap.put(actTaskNum,temp);
+                    iterator.remove();
+                    didSomethingElseToo = true;
+                }
                 //If act is terminate
                 if(act.equals("terminate")){
                     //Terminate task, should be removed from taskHashMap and added to finishedTasksHashmap
@@ -273,6 +283,18 @@ public class Banker {
                         }
                     }
 
+                }
+            }
+            /* Going over the tasks currently computing */
+            Set compSet = computingTasksMap.entrySet();
+            Iterator compIter = compSet.iterator();
+            while(compIter.hasNext()){
+                Map.Entry mentry = (Map.Entry)compIter.next();
+                Task compT = (Task)mentry.getValue();
+                compT.minusComptCycle();
+                if(compT.getComputeCycles() == 0){
+                    taskHashMap.put(compT.getTaskNum(),compT);
+                    compIter.remove();
                 }
             }
             if(!isTerminate || didSomethingElseToo)
