@@ -17,7 +17,7 @@ public class Banker {
         FileInputStream input  = null;
         BufferedReader br = null;
         try{
-            input  = new FileInputStream(args[0]);
+            input  = new FileInputStream("/Users/jeffersonvivanco/IdeaProjects/Lab3-Banker/inputs/input-11.txt");
             br = new BufferedReader(new InputStreamReader(input));
         }catch (Exception e){
             System.err.println("File could not be read or could not be found. Please make sure"+
@@ -223,9 +223,24 @@ public class Banker {
             /* Checking for deadlock */
             if(taskHashMap.isEmpty() && !taskWaitQ.isEmpty()){
                 isDeadLock = true;
-                while(isDeadLock){
 
-                    Task t = taskWaitQ.poll();
+                while(isDeadLock){
+                    int lowest = 100;
+                    Task lowestTask = null;
+                    for(Task tl : taskWaitQ){
+                        if(tl.getTaskNum() <= lowest){
+                            lowest = tl.getTaskNum();
+                        }
+                    }
+                    Iterator<Task> iter = taskWaitQ.iterator();
+                    while(iter.hasNext()){
+                        Task current = iter.next();
+                        if(current.getTaskNum() == lowest){
+                            lowestTask = current;
+                            iter.remove();
+                        }
+                    }
+                    Task t = lowestTask;
                     ArrayList<Resource> taskResources = t.getResources();
                     for(Resource r : taskResources){
                         Resource found = resourceWaitHashMap.get(r.getResource());
