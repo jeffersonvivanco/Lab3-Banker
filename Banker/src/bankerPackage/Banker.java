@@ -111,7 +111,7 @@ public class Banker {
                 }
                 resourceWaitHashMap.clear();
             }
-            /* Checking the taskWaitQ to see if we can satisfy any request of the tasks that are waiting. */
+            /* Checking the taskwaitQ to see if we can satisfy any request of the tasks that are waiting. */
             if(!taskWaitQ.isEmpty()){
 
                 Iterator<Task> iter = taskWaitQ.iterator();
@@ -133,7 +133,6 @@ public class Banker {
                             int unitsRequested = resourceHashMap.get(actResourceNum).releaseUnits(actResourceUnits);
                             Resource r  = t.getResource(actResourceNum);
                             r.addUnits(unitsRequested);
-//                            taskHashMap.put(actTaskNum,t);
                             processedQueuedTasks.add(t);
                             iter.remove();
                             didSomethingElseToo = true;
@@ -190,7 +189,7 @@ public class Banker {
                 //If act is release
                 if(act.equals("release")){
                     //Release it in this cycle, make it available to tasks at the next cycle
-                    //Also, here we need to check if any tasks are in the taskWaitQ and if they are, can we satisfy their request with the new release
+                    //Also, here we need to check if any tasks are in the taskwaitQ and if they are, can we satisfy their request with the new release
                     temp.releaseUnitsFromRes(actResourceUnits,actResourceNum);
                     Resource found = resourceWaitHashMap.get(actResourceNum);
                     if(found==null){
@@ -225,6 +224,7 @@ public class Banker {
             if(taskHashMap.isEmpty() && !taskWaitQ.isEmpty()){
                 isDeadLock = true;
                 while(isDeadLock){
+
                     Task t = taskWaitQ.poll();
                     ArrayList<Resource> taskResources = t.getResources();
                     for(Resource r : taskResources){
@@ -264,7 +264,6 @@ public class Banker {
             {
                 cycle++; //Incrementing cycle after the activity was done for each task
             }
-
         }
         /* Calculating final time and displaying info, iterating over finishedTasksHashmap. */
         int totalTime = 0;
@@ -279,7 +278,6 @@ public class Banker {
                 System.out.println("Task "+t.getTaskNum()+"      "+"aborted");
             }
             else{
-//                t.addTotalTime(cycle);
                 totalTime = totalTime+t.getTotalTime();
                 totalWaitingTime = totalWaitingTime + t.getWaitTime();
                 System.out.println("Task "+t.getTaskNum()+" "+t.getTotalTime()+" "+t.getWaitTime());
