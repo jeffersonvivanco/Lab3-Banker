@@ -6,8 +6,9 @@ package bankerPackage;
 public class Resource {
 
     private int resource;
-    private int units;
+    private int units = 0;
     private static int resourceNumber = 1;
+    private int initialClaim = 0;
 
     public Resource (int resNum, int u){
         this.resource = resNum;
@@ -36,6 +37,16 @@ public class Resource {
         else{
             return -1;
         }
+    }
+    public void setInitialClaim(int initialClaim){
+        this.initialClaim = initialClaim;
+    }
+    public int getInitialClaim(){
+        return this.initialClaim;
+    }
+    public int possibleNeededUnits(){
+        int possibleNeeded = initialClaim - units;
+        return possibleNeeded;
     }
     @Override
     public String toString(){

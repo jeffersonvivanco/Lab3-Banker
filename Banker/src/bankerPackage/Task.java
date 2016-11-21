@@ -15,6 +15,9 @@ public class Task {
     private int totalTime = 0;
     private boolean aborted = false;
     private int computeCycles = 0;
+    private int maxResourceUnits = 0;
+    private int requestedUnits = 0;
+
     public Task (int taskNum){
         this.taskNum = taskNum;
         this.activities = new LinkedList<String>();
@@ -101,6 +104,18 @@ public class Task {
     }
     public int getComputeCycles(){
         return this.computeCycles;
+    }
+    public void addMaxResourceUnits(int units){
+        this.maxResourceUnits = this.maxResourceUnits + units;
+    }
+    public int getMaxResourceUnits(){
+        return  this.maxResourceUnits;
+    }
+    public void addRequestedUnits(int units){
+        this.requestedUnits = this.requestedUnits+units;
+    }
+    public int getRequestedUnits(){
+        return this.requestedUnits;
     }
     @Override
     public String toString(){
